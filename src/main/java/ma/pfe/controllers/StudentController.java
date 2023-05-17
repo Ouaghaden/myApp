@@ -1,11 +1,13 @@
 package ma.pfe.controllers;
 
 import ma.pfe.dtos.StudentDto;
-import ma.pfe.entities.StudentEntity;
-import ma.pfe.repositories.StudentRepositoryImpl;
+import ma.pfe.dtos.StudentIdDto;
+import ma.pfe.entities.StudentId;
+import ma.pfe.repositories.StudentRepository;
 import ma.pfe.srvices.StudentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,9 +18,8 @@ public class StudentController {
 
     private final static Logger LOG= LoggerFactory.getLogger(StudentController.class);
     private StudentService service;
-    StudentController (StudentService service){
-        this.service=service;
-
+    public StudentController(@Qualifier("service1") StudentService studentService){
+        this.service=studentService;
     }
     @PostMapping
     public Long create (@RequestBody  StudentDto dto) {
@@ -51,6 +52,12 @@ public class StudentController {
 
 
     }
+    @GetMapping("/{id111}/{code111}")
+    public StudentDto findById(@PathVariable("id111") long id, @PathVariable("code111") String code) {
+        LOG.debug("start method findById id : {} code : {} ", id, code);
+        StudentIdDto idDto = new StudentIdDto(id, code);
+        return service.FindById(idDto);
 
+    }
 
 }
